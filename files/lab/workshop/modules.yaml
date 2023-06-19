@@ -1,0 +1,40 @@
+config:
+    vars:
+    - name: bastion-host
+      value: 192.168.123.100
+    - name: bastion-username
+      value: root
+    - name: bastion-password
+      value: redhat
+    - name: kubeadmin-password-file
+      value: /root/ocp-install/auth/kubeadmin-password
+    - name: node-network-domain
+      value: aio.example.com
+modules:
+    welcome:
+        name: Welcome
+        exit_sign: Review Environment
+    install-operator:
+        name: Review Environment
+        exit_sign: OpenShift Virtualization basics
+    introduction-vms:
+        name: OpenShift Virtualization basics
+        exit_sign: Virtual Machine Customization
+    introduction-customization:
+        name: Virtual Machine Customization
+        exit_sign: Pod Review and Virtual Machine Migration
+    pods-review:
+        name: Pod Review and Virtual Machine Migration
+        exit_sign: Network Attachment
+    network-attachment:
+        name: Network Attachment
+        exit_sign: Migrating Virtual Machines
+    mtv:
+        name: Migrating Virtual Machines
+        exit_sign: MTV Architecture
+    architecture:
+        name: MTV Architecture
+        exit_sign: thanks        
+    thanks:
+        name: Thanks
+

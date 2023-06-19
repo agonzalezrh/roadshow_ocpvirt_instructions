@@ -1,0 +1,16 @@
+name: Migrating to OpenShift Virtualization
+
+modules:
+    activate:
+    - welcome
+    - install-operator
+    - introduction-vms
+    - introduction-customization
+    - pods-review
+    - network-attachment
+    - mtv    
+    - architecture
+    - thanks
+
+
+

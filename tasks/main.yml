@@ -1,0 +1,115 @@
+---
+# vim: set ft=ansible:
+
+- name: Copy over k8s-aio env requirements.txt
+  ansible.builtin.copy:
+    src: conf/requirements.txt
+    dest: /tmp/requirements.txt
+
+- name: "Create k8s-aio venv"
+  pip:
+    requirements: "/tmp/requirements.txt"
+    virtualenv: "/opt/virtualenvs/k8s-aio"
+    virtualenv_site_packages: true
+    virtualenv_command: "/usr/bin/virtualenv"
+
+- name: "Set Ansible interpreter to venv"
+  set_fact:
+    ansible_python_interpreter: /opt/virtualenvs/k8s-aio/bin/python
+
+- name: Create project for workbook
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'lab/conf/cnvlab-project.yaml') }}"
+  register: project_success
+  retries: 3
+  delay: 30
+  until: project_success is not failed
+ 
+- name: Clone OpenShift virt repositories
+  git:
+    repo: "https://github.com/agonzalezrh/ocp4_aio_role_deploy_cnvlab.git"
+    dest: "/root/cnvlab"
+
+- name: Deploy Workbook Instance for CNV Labs
+  block:
+  - name: Create image stream
+    shell: oc -n workbook create imagestream cnv
+
+  - name: Configure and apply build template
+    shell: >-
+      oc -n workbook process
+      -f /root/cnvlab/files/lab/build-template.yaml -p NAME=cnv | oc -n workbook apply -f -
+    register: buildt_success
+    retries: 3
+    delay: 30
+    until: buildt_success is not failed
+
+  - name: Start the build
+    shell: |
+       oc -n workbook start-build cnv 
+    register: build_success
+
+  - name: Wait for the build to finish
+    shell: |
+      oc -n workbook annotate is cnv test="$(date)" --overwrite &&
+      oc -n workbook wait --for=condition=Complete  build/cnv-1 
+    retries: 5
+    delay: 30
+    register: build
+    until: build.rc == 0
+
+  - name: Configure and deploy the deploy template
+    shell: >-
+      oc -n workbook process
+      -f /root/cnvlab/files/lab/deploy-template.yaml -p ROUTEHOST=lab-instructions.apps.{{ guid }}.{{ cluster_dns_zone }} -p NAME=cnv -p IMAGE_STREAM_NAME=cnv -p WORKSHOP_VARS="{\"rhv_password\": \"{{ mig_rhv_password }}\", \"vcenter_password\": \"{{ mig_vcenter_password }}\", \"guid\": \"{{ guid }}\", \"password\": \"{{ hostvars['hypervisor']['student_password'] }}\", \"ocp_url\": \"https://console-openshift-console.apps.{{ guid }}.{{ cluster_dns_zone }}\"}"
+      | oc -n workbook apply -f -
+    register: deploy_success
+    retries: 3
+    delay: 30
+    until: deploy_success is not failed
+
+- name: Give cluster-admin privileges to CNV user
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'lab/conf/cnvlab-admin.yaml') }}"
+  register: clusteradmin_success
+  retries: 3
+  delay: 30
+  until: clusteradmin_success is not failed
+
+- name: Apply the MongoDB VM Template File
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'lab/deploy/mongodb-vm-template.yaml') }}"
+  register: mongodb_success
+  retries: 3
+  delay: 30
+  until: mongodb_success is not failed
+
+- name: Apply the ParksMap Application Template
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'lab/deploy/parksmap-application-template.yaml') }}"
+  register: parksmap_success
+  retries: 3
+  delay: 30
+  until: parksmap_success is not failed
+
+- name: Get CNV Lab Workbook Route
+  k8s_info:
+    kind: Route
+    api_version: route.openshift.io/v1
+    namespace: "workbook"
+    label_selectors:
+      - app = cnv
+  register: getroute
+
+- name: Save route infos in an object
+  add_host: 
+    name: "cnvlab_holder"
+    route: "{{ getroute.resources[0].spec.host }}"
+
+- name: Print CNV Lab Workbook Route
+  debug:
+    msg: "OpenShift Virtualization Lab Workbook: http://{{ getroute.resources[0].spec.host }}"
