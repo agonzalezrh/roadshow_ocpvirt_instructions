@@ -1,2 +1,2 @@
-# ocp4_aio_role_deploy_cnvlab
-Deploys CNV Lab on an Openshift environment using bookbag.
+# roadshow_ocpvirt_instructions
+Deploys Roadshow OpenShift Virtualization Demo instructions on an Openshift environment using bookbag.
