@@ -18,7 +18,7 @@ parameters:
     required: true
     value: quay.io/agonzalezrh/mig2ocpvirt-bookbag:latest
   - name: GIT_REPO
-    value: https://github.com/agonzalezrh/ocp4_aio_role_deploy_cnvlab
+    value: https://github.com/agonzalezrh/roadshow_ocpvirt_instructions
 
 objects:
   - apiVersion: image.openshift.io/v1
