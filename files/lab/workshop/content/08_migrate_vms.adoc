@@ -3,7 +3,7 @@
 
 =  Migration Toolkit Virtualization
 
-In this lab, you will install the Operator to perform migration to OpenShift Virtualization.
+In this lab, you will install the Operator to perform OpenShift Virtualization Roadshow .
 
 .Goals
 * Install Operator 
