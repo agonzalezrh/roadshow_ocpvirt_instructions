@@ -11,30 +11,30 @@ config:
     - name: node-network-domain
       value: aio.example.com
 modules:
-    welcome:
+    01_welcome:
         name: Welcome
         exit_sign: Review Environment
-    install-operator:
+    02_review_environment:
         name: Review Environment
         exit_sign: OpenShift Virtualization basics
-    introduction-vms:
+    03_ocpv_basics:
         name: OpenShift Virtualization basics
         exit_sign: Virtual Machine Customization
-    introduction-customization:
+    04_ocpv_customization:
         name: Virtual Machine Customization
         exit_sign: Pod Review and Virtual Machine Migration
-    pods-review:
+    05_vm_management:
         name: Pod Review and Virtual Machine Migration
-        exit_sign: Network Attachment
-    network-attachment:
-        name: Network Attachment
+        exit_sign: Network Management
+    06_network_management:
+        name: Network Management
         exit_sign: Migrating Virtual Machines
-    mtv:
+    07_storage_management:
+        name: Storage Management
+        exit_sign: Migrating Virtual Machines        
+    08_migrate_vms:
         name: Migrating Virtual Machines
-        exit_sign: MTV Architecture
-    architecture:
-        name: MTV Architecture
-        exit_sign: thanks        
-    thanks:
+        exit_sign: thanks     
+    09_thanks:
         name: Thanks
 
