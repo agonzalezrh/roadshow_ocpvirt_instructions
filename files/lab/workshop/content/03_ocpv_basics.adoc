@@ -1,9 +1,94 @@
 :scrollbar:
 :toc2:
 
-== VM Creation and Administration with Web Console Lab
+= OpenShift Virtualization Basics
 
 :numbered:
+
+== Operators
+
+*Operators*: An Operator is a Kubernetes-native application. The goal of an Operator is to put operational knowledge into software. Previously this knowledge only resided in the minds of administrators, various combinations or shell scripts or automation software such as Ansible. It was outside your Kubernetes cluster and hard to integrate. With *Operators*, all of this changes.
+
+*Operators* are purpose-built for your applications. They implement and automate common Day 1 activities such as installation and configuration as well as Day 2 activities such as scaling up and down, reconfiguration, updates, backups, fail overs, and restores in a piece of software running inside your Kubernetes cluster by integrating natively with Kubernetes concepts and APIs. This is called a Kubernetes-native application.
+
+With *Operators*, applications must not be treated as a collection of primitives, such as pods, deployments, services, or config maps. Instead, *Operators* should be treated as a single object that exposes the options that make sense for the application.
+
+=== Install Operator
+
+In this section, you install an Operator from the *OperatorHub* page. You manage *Operators* from the Administrator perspective in the web console.
+
+. Logout from `developer` user and login again to `admin` user.
+
+. From the navigation menu, select *Operators* -> *OperatorHub*:
++
+image::images/Install/01_OperatorHub_Menu.png[]
+
+. Explore the *OperatorHub* page and note that all of the currently available Operators are displayed:
++
+image::images/Install/02_OperatorHub_Dashboard.png[]
++
+The dashboard lists the Operators that can be installed and various ways to filter the list.
+
+. In the *Filter by keyword...* field, type `OpenShift Virtualization` and select the OpenShift Virtualization tile:
++
+image::images/Install/03_OperatorHub_Search.png[]
++
+You can also filter by category, installation state, provider, provider type, capability level, or infrastructure features.
+
+. Click *Install*:
++
+image::images/Install/04_OperatorHub_Install.png[]
+
+. On the *Install Operator* wizard page that opens with the default options selected, click  *Install*:
++
+image::images/Install/05_OperatorHub_Install_Wizard.png[]
++
+The wizard allows you to specify the update channel, the installation mode, the installed Namespace, and the update approval strategy options.
++
+As the installation progresses, the status is shown.
+
+. After the operator is installed, is required to create the _Custom Resources_ (Resources required to create _Virtual Machines_). For that, click *Create HyperConverged* to complete the installation:
++
+image::images/Install/06_OperatorHub_Install_Progress.png[]
+
+. Review the *Create HyperConverged* wizard options:
++
+image::images/Install/08_Create_HyperConverged.png[]
+
+. You can review the available options. Without changing the default values, scroll down and click *Create*. It will open the *OpenShift Virtualization Deployment* tab in the *OpenShift Virtualization* Operator:
++
+image::images/Install/09_Hyperconverged_Tab.png[]
++
+[NOTE]
+These options allows to specify advanced options, such as which nodes are going to be used to run _Virtual Machines_, _live migration_ configurations, default CPU model, among other options.
+
+. Watch the *Status* column until the status changes to `Available`:
++
+image::images/Install/10_Hyperconverged_Available.png[]
+
+. Refresh the web console when this popup appears.
++
+image::images/Refresh_UI.png[]
+
+
+=== Examine OpenShift Virtualization Operator
+
+. Click the *Details* tab to view information about the Operator:
++
+image::images/Install/11_Details_1.png[]
+
+. Scroll down to the *ClusterServiceVersion details* section and review the details:
++
+image::images/Install/11_Details_2.png[]
++
+You can see the Namespace where the Operator was installed, the status, the different Operator deployments created during the installation, the Operator ServiceAccounts created, and the OperatorGroup.
+
+. Scroll up and click the *Subscription* tab to view the subscription details:
++
+image::images/Install/12_Subscription.png[]
++
+[NOTE]
+Subscribing an Operator to one or more namespaces makes the Operator available to developers on your cluster.
 
 == Introduction to Creation and Administration of VMs
 
@@ -72,10 +157,9 @@ image::images/Create_VM_PVC/09_Fedora_Events.png[]
 . Click the *Details* tab to obtain information related to the VM:
 +
 image::images/Create_VM_PVC/10_Fedora_Details.png[]
-+
-As with other resources in OpenShift, a VM is defined using a YAML manifest.
 
-. Click the *YAML* tab to show the definition:
+
+. As with other resources in Kubernetes, a VM is defined using a YAML manifest. Click the *YAML* tab to show the definition:
 +
 image::images/Create_VM_PVC/11_Fedora_YAML.png[]
 
@@ -92,7 +176,7 @@ image::images/Create_VM_PVC/14_Fedora_Console_Show_Password.png[]
 . Log in to the VM using the `fedora` user and the indicated password.
 +
 [IMPORTANT]
-Unfortunately it is not possible to copy and paste the password to the terminal.
+You can click on `Paste` to paste the password after copy it.
 +
 [IMPORTANT]
 The console input is using US keymap. One small trick is to write in the login the password to ensure the characters (specially the `-` is correct).
@@ -101,7 +185,7 @@ The console input is using US keymap. One small trick is to write in the login t
 +
 image::images/Create_VM_PVC/15_Fedora_Network.png[]
 +
-The IP address assigned is an internal IP address used for the KVM and is not the accessible IP.
+The IP address assigned is an internal IP address used by the _KVM hypervisor_ and is not the accessible IP.
 
 . Run `lsblk` to display the list of disks and their capacities and free space:
 +
@@ -118,7 +202,9 @@ image::images/Create_VM_PVC/17_Fedora_CPU_Memory.png[]
 +
 image::images/Create_VM_PVC/21_Fedora01_Cloud_Init.png[]
 
-
+. The instance is running the guest agent to collect information for the hypervisor.
++
+image::images/Create_VM_PVC/19_Fedora_Agent.png[]
 . Click the *Overview* tab to show the information obtained from the guest VM:
 +
 image::images/Create_VM_PVC/19_Fedora_Agent_Details.png[]
@@ -128,9 +214,21 @@ image::images/Create_VM_PVC/19_Fedora_Agent_Details.png[]
 * Active users
 * Utilization: CPU, Memory, Storage and Network.
 
-== Examine Resources Associated with VM
+. You can navigate to the tab *Metrics* to obtain more information about the usage, being able to specify the time rage.
++
+image::images/Create_VM_PVC/19_Fedora_Metrics.png[]
 
-. Examine the network interfaces attached to the VM:
+=== Examine Resources Associated with VM
+
+The tab *Configuration* it is the entry point to obtain information about the resources of the Virtual Machine. It includes five subtabs:
+
+* *Scheduling*: It includes advanced configuration indicating where the VM should run and the strategy to follow for eviction.
+* *Environment*: It is possible attach _ConfigMaps_, _Secrets_ and _Service Accounts_ as extra disks.
+* *Network interfaces*: It shows the current network interfaces configured for the VM and add new ones.
+* *Disks*: It lists the disks attached to the system and allows to add new disks to the system. if the guest is configured with the agent, it lists the filesystems and the utilization.
+* *Scripts*: It allows to configure _Cloud Init_, setting the commands to be executed in the first boot, the injection of SSH keys and netwrk configuration.
+
+. Examine the network interfaces attached to the VM clicking on the subtab *Network interfaces:
 +
 image::images/Create_VM_PVC/20_Network_Tab.png[]
 +

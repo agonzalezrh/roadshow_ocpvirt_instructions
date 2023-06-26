@@ -16,7 +16,7 @@ parameters:
     value: bookbag
   - name: BUILDER_IMAGE
     required: true
-    value: quay.io/agonzalezrh/mig2ocpvirt-bookbag:latest
+    value: quay.io/agonzalezrh/ocpvirt-workshop
   - name: GIT_REPO
     value: https://github.com/agonzalezrh/roadshow_ocpvirt_instructions
 
