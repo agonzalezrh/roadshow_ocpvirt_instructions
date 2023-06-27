@@ -22,13 +22,13 @@ modules:
         exit_sign: Virtual Machine Customization
     04_ocpv_customization:
         name: Virtual Machine Customization
-        exit_sign: Pod Review and Virtual Machine Migration
+        exit_sign: Pod Review and Virtual Machine Management
     05_vm_management:
-        name: Pod Review and Virtual Machine Migration
+        name: Pod Review and Virtual Machine Management
         exit_sign: Network Management
     06_network_management:
         name: Network Management
-        exit_sign: Migrating Virtual Machines
+        exit_sign: Storage Management
     07_storage_management:
         name: Storage Management
         exit_sign: Migrating Virtual Machines        

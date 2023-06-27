@@ -32,7 +32,7 @@ image::images/Create_VM_URL/00_Overview.png[]
 +
 image::images/Create_VM_URL/00_VMs.png[]
 
-. In the top right dropdown, select *Create* -> *From catalog*:
+. In the top right dropdown, select *Create* -> *From template*:
 +
 image::images/Create_VM_URL/00_Create.png[]
 
@@ -44,15 +44,15 @@ image::images/Create_VM_URL/00_Catalog.png[]
 +
 image::images/Create_VM_URL/00_Fedora.png[]
 
-== Customize Virtual Machine
+. Customize Virtual Machine
 
-. Specify the name `fedora02`
-. Under *Storage* section 
-.. *Disk source*: `URL (creates PVC)`
-.. *URL*: `http://192.168.123.100:81/Fedora35.qcow2`
-.. *Disk size*: 30 GiB
-. Press *Review and create Virtual Machine*
-
+.. Specify the name `fedora02`
+.. Under *Storage* section 
+... *Disk source*: `URL (creates PVC)`
+... *URL*: `http://192.168.123.100:81/Fedora35.qcow2`
+... *Disk size*: 30 GiB
+. Press *Next*
++
 image::images/Create_VM_URL/01_Create_VM_Boot_Source.png[]
 
 . Review *Overview* tab with the default configuration from the template
@@ -68,7 +68,13 @@ image::images/Create_VM_URL/02_Wizard_Scheduling.png[]
 +
 image::images/Create_VM_URL/03_Wizard_Networking.png[]
 
-. Navigate to *Disks* tab
+. Click the three vertical dots icon to edit `default`, and review the default options:
++
+image::images/Create_VM_URL/03_Wizard_Networking_Options.png[]
+
+
+
+. Press *Cancel* and navigate to *Disks* tab
 +
 image::images/Create_VM_URL/04_Wizard_Storage.png[]
 +
@@ -81,6 +87,8 @@ image::images/Create_VM_URL/04_Wizard_Storage_settings.png[]
 . Press *Cancel* and navigate to *Scripts* tab
 +
 image::images/Create_VM_URL/05_Wizard_Scripts.png[]
++
+Notice for Windows systems is possible to use *Sysprep* and define and `unattend.xml`` answer file
 
 . Press *Edit* in the *Cloud-init* section to specify the password `r3dh4t1!` to the user `fedora`
 +
@@ -89,6 +97,7 @@ image::images/Create_VM_URL/05_Wizard_Scripts_Password.png[]
 . Press *Create VirtualMachine* and ensure *Start this VirtualMachine after creation* is checked
 +
 image::images/Create_VM_URL/06_Wizard_Review.png[]
+
 
 . Navigate to *Workloads* -> *Pods*:
 +
@@ -107,6 +116,8 @@ image::images/Create_VM_URL/08_Importer_Pod_Logs.png[]
 +
 [IMPORTANT]
 This Pod is accessible only while the disk is being imported and is automatically deleted once the process completes.
+
+
 
 == Summary
 

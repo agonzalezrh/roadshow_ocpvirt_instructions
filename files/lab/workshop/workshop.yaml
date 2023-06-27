@@ -2,15 +2,15 @@ name: OpenShift Virtualization Roadshow
 
 modules:
     activate:
-    - welcome
-    - install-operator
-    - introduction-vms
-    - introduction-customization
-    - pods-review
-    - network-attachment
-    - mtv    
-    - architecture
-    - thanks
+    - 01_welcome
+    - 02_review_environment
+    - 03_ocpv_basics
+    - 04_ocpv_customization
+    - 05_vm_management
+    - 06_network_management
+    - 07_storage_management
+    - 08_migrate_vms
+    - 09_thanks
 
 
 
