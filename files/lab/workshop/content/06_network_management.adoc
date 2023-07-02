@@ -1,11 +1,11 @@
 :scrollbar:
 :toc2:
 
-== Network Attachment Lab
+= Network Management Lab
 
 :numbered:
 
-== Introduction to Network Attachment
+== Introduction to Network Management
 
 By default, the virtual machines (VMs) are attached to Pod networking, enabling access from Pods and other VMs.
 
@@ -46,7 +46,7 @@ image::images/Networking/00_Operator_Create_Instance_Wizard.png[]
 == Create Linux Bridge on Worker Nodes
 
 Worker nodes have an extra network interface that is connected to a physical network.
-To configure the physical network, you need to create a new custom resource whose _kind_ is NodeNetworkConfigurationPolicy.
+To configure the physical network, you need to create a new custom resource whose _kind_ is `NodeNetworkConfigurationPolicy`.
 
 . In the OpenShift Container Platform web console, navigate to *Administration* -> *CustomResourceDefinitions*:
 +
@@ -92,7 +92,7 @@ spec:
             - name: enp3s0
 ----
 +
-This configuration uses the `enp3s0` interface on the worker nodes to create a Linux Bridge called `br-flat`.
+This configuration uses the `enp3s0` interface on the Worker Nodes to create a Linux Bridge called `br-flat`.
 
 . Click *Create*.
 
@@ -114,27 +114,44 @@ image::images/Networking/01_NAD_Dashboard.png[]
 * *Bridge Name*: `br-flat`
 +
 image::images/Networking/02_NAD_Create.png[]
++
+[NOTE]
+As you can observe in this form, it is possible to configure VLAN networks.
 
 . Examine the details of the network attachment definition:
 +
 image::images/Networking/03_NAD_Created.png[]
 
-. Navigate to *Virtualization* -> *VirtualMachines*, select the `fedora02` VM, and click the *Network Interfaces* tab:
+. Navigate to *Virtualization* -> *VirtualMachines*, select the `fedora02` VM. Click *Configuration* tab and then click the *Network Interfaces* subtab:
 +
 image::images/Networking/04_VM_Network_Tab.png[]
 
-. Click *Add Network Interface*, complete the form as shown, then click *Add*:
+. Click *Add Network Interface*, complete the form as shown, then click *Save*:
 +
 image::images/Networking/05_VM_Network_Attach.png[]
 
-. Use the *Actions* to restart the VM and navigate to *Console* tab:
+. Use the *Actions* menu to restart the VM. After is rebooted, navigate to *Console* tab:
 +
 image::images/Networking/06_VM_Network_Console.png[]
 +
-The `eth1` interface obtains an IP address from the student network (192.168.3.x/24). That network has a DHCP server providing IPs to the network.
+The `eth1` interface obtains an IP address from the flat network (192.168.3.x/24). That network has a DHCP server providing IPs to that network.
+
+. Using the available console in the right part, you can confirm you have direct access to the VM through a flat network
++
+[%nowrap]
+----
+[~] $ curl 192.168.3.118:22                           
+----
++
+.Sample Output
++
+[%nowrap]
+----
+SSH-2.0-OpenSSH_8.7     
+----
+
+
 
 == Summary
 
 In this lab, you connected a VM to a physical network using a Linux Bridge so that it is accessible outside the cluster of the Red Hat OpenShift Container Platform.
-
-You may continue to the next lab, _Virtual Machine Creation Using YAML Lab_.

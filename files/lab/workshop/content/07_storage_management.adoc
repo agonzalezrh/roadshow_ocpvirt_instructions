@@ -1,140 +1,176 @@
 :scrollbar:
 :toc2:
 
-== Network Attachment Lab
+= Storage Management  Lab
 
 :numbered:
 
-== Introduction to Network Attachment
+== Introduction to Storage Management 
 
-By default, the virtual machines (VMs) are attached to Pod networking, enabling access from Pods and other VMs.
+OpenShift Container Platform supports multiple types of storage, both for on-premise and cloud providers. You can manage container storage for persistent and non-persistent data in an OpenShift Container Platform cluster.
 
-In this lab, you connect a VM to a physical network so that it is accessible outside the cluster of Red Hat^(R)^ OpenShift^(R)^ Container Platform.
+=== Glosarry of terms
 
-.Goals
-* Create a Linux^(R)^ Bridge on worker nodes
-* Create a network attachment definition
+*Access modes*: Volume access modes describe volume capabilities. You can use access modes to match _persistent volume claim_ (*PVC*) and _persistent volume_ (*PV*). The following are the examples of access modes:
 
-== Install NMstate operator
+. ReadWriteOnce (RWO)
+. ReadOnlyMany (ROX)
+. ReadWriteMany (RWX)
+. ReadWriteOncePod (RWOP)
 
-The Kubernetes NMState Operator provides a Kubernetes API for performing state-driven network configuration across the OpenShift Container Platform cluster’s nodes with NMState. The Kubernetes NMState Operator provides users with functionality to configure various network interface types, DNS, and routing on cluster nodes. Additionally, the daemons on the cluster nodes periodically report on the state of each node’s network interfaces to the API server.
+*Container Storage Interface (CSI)*: An API specification for the management of container storage across different container orchestration (CO) systems.
 
-. Navigate to *Operators* -> *OperatorHub* and filter for `nmstate`
+*Dynamic Provisioning*: The framework allows you to create storage volumes on-demand, eliminating the need for cluster administrators to pre-provision persistent storage.
+
+*Ephemeral storage*: Pods and containers can require temporary or transient local storage for their operation. The lifetime of this ephemeral storage does not extend beyond the life of the individual pod, and this ephemeral storage cannot be shared across pods.
+
+*Local volumes*: A local volume represents a mounted local storage device such as a disk, partition or directory.
+
+*OpenShift Data Foundation*: A provider of agnostic persistent storage for *OpenShift Container Platform* supporting file, block, and object storage, either in-house or in hybrid clouds
+
+*Persistent storage*: Pods and containers can require permanent storage for their operation. *OpenShift Container Platform* uses the Kubernetes persistent volume (PV) framework to allow cluster administrators to provision persistent storage for a cluster. Developers can use _PVC_ to request _PV_ resources without having specific knowledge of the underlying storage infrastructure.
+
+*Persistent volumes (PV)*: *OpenShift Container Platform* uses the Kubernetes persistent volume (PV) framework to allow cluster administrators to provision persistent storage for a cluster. Developers can use _PVC_ to request PV resources without having specific knowledge of the underlying storage infrastructure.
+
+*Persistent volume claims (PVCs)*: You can use a _PVC_ to mount a _PersistentVolume_ into a Pod. You can access the storage without knowing the details of the cloud environment.
+
+*Reclaim policy*:A policy that tells the cluster what to do with the volume after it is released. A volume’s reclaim policy can be `Retain`, `Recycle`, or `Delete`.
+
+*Storage class*:A _storage class_ provides a way for administrators to describe the classes of storage they offer. Different classes might map to quality of service levels, backup policies, arbitrary policies determined by the cluster administrators.
+
+
+== OpenShift Virtualization Operator Boot Sources
+
+A boot source contains a bootable operating system (OS) and all of the configuration settings for the OS, such as drivers. For some operating systems, a boot source is automatically provided. If it is not provided, then an administrator must prepare a custom boot source.
+
+Provided boot sources are updated automatically to the latest version of the operating system. For auto-updated boot sources, _persistent volume claims_ (PVCs) are created with the cluster’s default _storage class_.
+
+To use the boot sources feature, install the latest release of *OpenShift Virtualization*. The namespace `openshift-virtualization-os-images` enables the feature and is installed with the *OpenShift Virtualization Operator*.
+
+. Navigate to *Storage* -> *PersistentVolumeClaims*:
 +
-image::images/Networking/00_OperatorHub.png[]
-. Press on the tile and perform the installation pressing *Install*
+image::images/Storage/00_Left_Menu.png[]
+
+. Press in the dropdown for the projects, enable `Show default projects` and select the project `openshift-virtualization-os-images`
 +
-image::images/Networking/00_Operator_Install.png[]
-. Review default options and press *Install*
+image::images/Storage/01_Select_Project.png[]
+
+. List the _Persistent Volume Claims_ automatially created by the Operator.
 +
-image::images/Networking/00_Operator_Install2.png[]
+image::images/Storage/02_List_PVCs.png[]
 
-. After installation, press *View Operator* 
+. Select one of the list, for example `fedora-XX` one to obtain more information
 +
-image::images/Networking/00_Operator_Installed.png[]
+image::images/Storage/03_PVC_Info.png[]
 
-. Create a new instance for the *NMState* pressing `Create instance`
+. When a VM is created, the _Boot Source_ image is cloned and a new _persistent volume claim_ is created.
+. Switch to the project `vmexamples` and review the list of the _PVCs_:
 +
-image::images/Networking/00_Operator_Create_Instance.png[]
+image::images/Storage/04_List_PVCs_VMs.png[]
 
-. Review the options available and press *Create* without modify any.
+. Select the `fedora02` to obtain information
 +
-image::images/Networking/00_Operator_Create_Instance_Wizard.png[]
+image::images/Storage/05_PVC_VM_Info.png[]
 
-
-
-== Create Linux Bridge on Worker Nodes
-
-Worker nodes have an extra network interface that is connected to a physical network.
-To configure the physical network, you need to create a new custom resource whose _kind_ is NodeNetworkConfigurationPolicy.
-
-. In the OpenShift Container Platform web console, navigate to *Administration* -> *CustomResourceDefinitions*:
+. A _Persistent Volume Claim_ will claim to a specific _storage class_, or to the default one, to provision a _volume_. Navigate to *Storage* -> *PersistentVolumes* to obtain a list. Sort by *Claim*.
 +
-image::images/Networking/10_CustomResourceDefinitions.png[]
+image::images/Storage/07_PV_List.png[]
 
-. In the *Search by name* field, type `NodeNetworkConfigurationPolicy`:
+. Now vavigate to *Virtualization* -> *Bootable volumes* to obtain a list of the available volumes
 +
-image::images/Networking/11_NodeNetworkConfigurationPol.png[]
+image::images/Storage/08_List_Bootable_Volumes.png[]
 
-. Click `NodeNetworkConfigurationPolicy` and navigate to the *Instances* tab:
-+
-image::images/Networking/12_nodenetworkconfigurationpolicies.png[]
 
-. Click *Create NodeNetworkConfigurationPolicy*:
-+
-image::images/Networking/13_Create_NNCP.png[]
+== Snapshots
 
-. Copy and paste the following content into the editor:
+=== Introduction
+A `snapshot` represents the state and data of a _virtual machine_ (_VM_) at a specific point in time. You can use a `snapshot` to restore an existing VM to a previous state (represented by the `snapshot`) for backup and disaster recovery or to rapidly roll back to a previous development version.
+
+You can create and delete virtual machine (VM) `snapshots` for VMs, whether the VMs are powered off (offline) or on (online). You can only restore to a powered off (offline) VM. *OpenShift Virtualization* supports VM `snapshots` on the following:
+
+* *Red Hat OpenShift Data Foundation*
+
+* Any other cloud storage provider with the *Container Storage Interface (CSI)* driver that supports the _Kubernetes Volume Snapshot API_.
+
+With the VM snapshots feature, cluster administrators and application developers can:
+
+. Create a new snapshot
+
+. List all snapshots attached to a specific VM
+
+. Restore a VM from a snapshot
+
+. Delete an existing VM snapshot
+
+=== Operate with Snapshots
+
+. Navigate back to *Virtualization* -> *VirtualMachines* and select the vm `fedora02` on the project `vmexamples`
 +
-[source,yaml]
+image::images/Storage/09_VM_Overview.png[]
+
+. Navigate to the *Snapshots* tab
++
+image::images/Storage/10_VM_Snapshots_Tab.png[]
+
+. Press *Take snapshot* and a dialog will open.
++
+image::images/Storage/11_VM_Snapshot_Dialog.png[]
+
+. Press *Save* and wait till the _Snapshot_ is with `Succeeded` status
++
+image::images/Storage/12_VM_Snapshot_Taken.png[]
+
+. Press the three dots and check the *Restore* option is greyed out because the VM is running
++
+image::images/Storage/13_VM_Restore_Disabled.png[]
+
+. Switch to the *Console* tab to perform a modification. Login with the user `fedora` and password `r3dh4t1`. Execute the command:
++
+[source,sh]
 ----
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: br-flat
-spec:
-  nodeSelector:
-    node-role.kubernetes.io/worker: ""
-  desiredState:
-    interfaces:
-      - name: br-flat
-        description: Linux bridge with enp3s0 as a port
-        type: linux-bridge
-        state: up
-        ipv4:
-          dhcp: false
-          enabled: false
-        bridge:
-          options:
-            stp:
-              enabled: false
-          port:
-            - name: enp3s0
+[fedora@fedora02 ~]$ sudo rm -rf /boot/grub2; sudo shutdown -r now
 ----
+
+. The _Virtual Machine_ will not be able to boot. 
 +
-This configuration uses the `enp3s0` interface on the worker nodes to create a Linux Bridge called `br-flat`.
+image::images/Storage/14_VM_Crashed.png[]
 
-. Click *Create*.
+. Using the *Actions* dropdown menu, stop the _Virtual Machine_. Wait some minutes till the VM is Stopped.
 
-. Watch the *Conditions* section until the *Available* status changes to `True`:
+. Navigate back to the *Snapshots* tab and press *Restore* on the previous created snapshot.
 +
-image::images/Networking/14_Status_NNCP.png[]
+image::images/Storage/15_VM_Restore.png[]
 
-== Create Network Attachment Definition
-
-. Navigate to *Networking* -> *Network Attachment Definitions* and click *Create network attachment definition*:
+. In the dialog shown, press *Restore*
 +
-image::images/Networking/01_NAD_Dashboard.png[]
+image::images/Storage/16_VM_Restore_Dialog.png[]
 
-. IMPORTANT: Select project `vmexamples`
+. Wait till the VM is restored and start the VM 
++
+image::images/Storage/17_VM_Restored.png[]
 
-. Complete the form for the `vmexamples` project as follows, then click *Create network attachment definition*:
-* *Name*: `flatnetwork`
-* *Network Type*: `CNV Linux Bridge`
-* *Bridge Name*: `br-flat`
+. Ensure the VM is booting properly.
 +
-image::images/Networking/02_NAD_Create.png[]
+image::images/Storage/18_VM_Running.png[]
 
-. Examine the details of the network attachment definition:
-+
-image::images/Networking/03_NAD_Created.png[]
 
-. Navigate to *Virtualization* -> *VirtualMachines*, select the `fedora02` VM, and click the *Network Interfaces* tab:
-+
-image::images/Networking/04_VM_Network_Tab.png[]
 
-. Click *Add Network Interface*, complete the form as shown, then click *Add*:
-+
-image::images/Networking/05_VM_Network_Attach.png[]
 
-. Use the *Actions* to restart the VM and navigate to *Console* tab:
+== Clone a Virtual Machine
+
+Cloning creates a new VM that uses its own disk image for storage, but most of the clone's configuration and stored data is identical to the source VM.
+
+. Press *Clone* from the *Actions* menu and a dialog will open
 +
-image::images/Networking/06_VM_Network_Console.png[]
+image::images/Storage/19_VM_Clone_Dialog.png[]
 +
-The `eth1` interface obtains an IP address from the student network (192.168.3.x/24). That network has a DHCP server providing IPs to the network.
+Notice the VM, if is powered on, it will be stopped to perform the clone.
+
+. A new VM is created, the disks are cloned and automatically the portal will redirect you to the new VM.
++
+image::images/Storage/20_VM_Cloned.png[]
+
 
 == Summary
 
-In this lab, you connected a VM to a physical network using a Linux Bridge so that it is accessible outside the cluster of the Red Hat OpenShift Container Platform.
-
-You may continue to the next lab, _Virtual Machine Creation Using YAML Lab_.
+In this module you have learned the basics concepts of storage on OpenShift, review how OpenShift Virtualization automatically is downloading and creating boot sources. Furthermore, you have perform tasks related to the storage to the VM, such as create snapshots, restore snapshot and clone a Virtual Machine.

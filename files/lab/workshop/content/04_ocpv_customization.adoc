@@ -72,8 +72,6 @@ image::images/Create_VM_URL/03_Wizard_Networking.png[]
 +
 image::images/Create_VM_URL/03_Wizard_Networking_Options.png[]
 
-
-
 . Press *Cancel* and navigate to *Disks* tab
 +
 image::images/Create_VM_URL/04_Wizard_Storage.png[]
@@ -87,8 +85,6 @@ image::images/Create_VM_URL/04_Wizard_Storage_settings.png[]
 . Press *Cancel* and navigate to *Scripts* tab
 +
 image::images/Create_VM_URL/05_Wizard_Scripts.png[]
-+
-Notice for Windows systems is possible to use *Sysprep* and define and `unattend.xml`` answer file
 
 . Press *Edit* in the *Cloud-init* section to specify the password `r3dh4t1!` to the user `fedora`
 +
@@ -123,4 +119,4 @@ This Pod is accessible only while the disk is being imported and is automaticall
 
 In this lab, you created and customize a new VM from a QCOW2 image hosted at a URL. You also saw how importer Pods are used to create VMs.
 
-You may continue to the next lab, _Pod and Virtual Machine Migration Lab_.
+You may continue to the next lab, _VM Management Lab_.

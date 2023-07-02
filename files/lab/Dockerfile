@@ -2,8 +2,8 @@ FROM quay.io/agonzalezrh/workshop-terminal:latest
 
 USER root
 
-ADD https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.12/openshift-client-linux.tar.gz /opt/app-root/bin/
-ADD https://github.com/kubevirt/kubevirt/releases/download/v0.58.0/virtctl-v0.58.0-linux-amd64 /opt/app-root/bin/virtctl
+ADD https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.13/openshift-client-linux.tar.gz /opt/app-root/bin/
+ADD https://github.com/kubevirt/kubevirt/releases/download/v0.59.2/virtctl-v0.59.2-linux-amd64 /opt/app-root/bin/virtctl
 
 COPY . /tmp/src
 

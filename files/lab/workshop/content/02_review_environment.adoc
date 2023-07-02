@@ -147,7 +147,7 @@ image::images/Install/developer.png[]
 +
 Notice the user `developer` has a different dashboard and option than the `admin` user.
 
-. The first common task for a regular user is to create a new project. Press in the link `Create a new Project` or select *All Projects* dropdown menu and press *Create Project*. Use the name `podexample` as project name.
+. The first common task for a regular user is to create a new project. Press in the link `Create a new Project` or select *All Projects* dropdown menu and press *Create Project*. Use the name `podexamples` as project name.
 +
 image::images/Install/newproject.png[]
 
@@ -187,11 +187,6 @@ image::images/Install/open_url.png[]
 image::images/Install/quarkus.png[]
 
 
-
-
-
-
-
 == Summary
 
-In this lab, you became familiar with requirements that must be met in your Red Hat OpenShift Container Platform cluster to install Red Hat OpenShift Virtualization and review the environment to be used.
+In this lab, you became familiar with requirements that must be met in your Red Hat OpenShift Container Platform cluster to install Red Hat OpenShift Virtualization and review the environment to be used. As well you have created your first project and deploy an application.
