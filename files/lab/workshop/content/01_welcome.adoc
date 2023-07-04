@@ -21,4 +21,12 @@ endif::[]
 * *Network Attachment*: *Virtual Machines* by default are running in the *Pod networking*. For several use cases is required to run the VMs attached to a physical network, this section will demonstrate how to configure *OpenShift* for that purpose.
 * *Storage Management*: This module will introduce you to the basics of the storage on OpenShift and how OpenShift Virtualization automatically provides boot sources. As well this module will show how to perform operations with snapshots and how to clone Virtual Machines..
 * *Migrating Virtual Machines*: In this section several migration from different providers will be performed. Using the operator *Migration Toolkit Virtualization* (*MTV*) migration from *VMWare vCenter* will be performed. 
+
+ifeval::["{preinstall_operators}" == "True"]
+* *MetalLB*: Using baremetal on-premise environment entails challenge to provide external access to the applications running on VMs. Using *MetalLB* will solve that challenge.
+
+endif::[]
+
+ifeval::["{preinstall_operators}" == "False"]
 * *MetalLB*: Using baremetal on-premise environment entails challenge to provide external access to the applications running on VMs. Using *MetalLB* will solve that challenge. This module will show how to install and configure this operator.
+endif::[]
