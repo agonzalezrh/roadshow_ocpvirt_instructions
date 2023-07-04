@@ -6,11 +6,11 @@ This *OpenShift Virtualization Roadshow* lab is organized in the following secti
 
 %preinstall_operators%
 
-ifdef::preinstall_operators[]
+ifeval::["{preinstall_operators}" == "True"]
 * *OpenShift Virtualization basics*: In this section you will review the *OpenShift Virtualization* operator. Even this lab is related to the migration from other platforms, this lab covers the basics and the required concepts needed to run simple *Virtual Machines* and administrate them.
 endif::[]
 
-ifndef::preinstall_operators[]
+ifeval::["{preinstall_operators}" == "False"]
 * *OpenShift Virtualization basics*: In this section you will perform the installation of the *OpenShift Virtualization* operator. Even this lab is related to the migration from other platforms, this lab covers the basics and the required concepts needed to run simple *Virtual Machines* and administrate them.
 endif::[]
 
