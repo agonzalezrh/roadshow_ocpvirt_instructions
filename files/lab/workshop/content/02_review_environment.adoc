@@ -1,17 +1,18 @@
 :scrollbar:
 
 :toc2:
+:preinstall_operators: %preinstall_operators%
 
 = Environment Review 
 
 :numbered:
 
 == Introduction
-In this lab, you will review the environment to be used during the this Workshop and learn the basics of * Red Hat OpenShift Container Platform*
+In this lab, you will review the environment to be used during the this Workshop and learn the basics of *Red Hat OpenShift Container Platform*
 
 .Goals
-* Become familiar with the cluster requirements for Red Hat OpenShift Virtualization
-* Explore the nodes and machines in your Red Hat OpenShift Container Platform cluster
+* Become familiar with the cluster requirements for *Red Hat OpenShift Virtualization*
+* Explore the nodes and machines in your *Red Hat OpenShift Container Platform* cluster
 * Learn the basic concepts of *Red Hat OpenShift Container Platform*
 
 == Review Red Hat OpenShift Container Platform Cluster
@@ -145,11 +146,16 @@ image::images/Install/Logout.png[]
 +
 image::images/Install/developer.png[]
 +
-Notice the user `developer` has a different dashboard and option than the `admin` user.
+Notice the user `developer` has a different dashboard and options than the `admin` user.
 
 . The first common task for a regular user is to create a new project. Press in the link `Create a new Project` or select *All Projects* dropdown menu and press *Create Project*. Use the name `podexamples` as project name.
 +
+ifeval::["{preinstall_operators}" == "False"]
 image::images/Install/newproject.png[]
+endif::[]
+ifeval::["{preinstall_operators}" == "True"]
+image::images/Install/newproject2.png[]
+endif::[]
 
 . After the project is created, it is possible to add resources to the cluster. The dashboard is shows useful information about the possibilities available:
 +

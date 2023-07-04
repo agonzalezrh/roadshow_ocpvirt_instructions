@@ -79,6 +79,8 @@ endif::[]
 
 ifeval::["{preinstall_operators}" == "True"]
 
+. Logout from `developer` user and login again to `admin` user.
+
 . Navigate to *Operators* -> *Installed Operators* in the left menu
 +
 image::images/Install/01_Installed_Operators_Menu.png[]
