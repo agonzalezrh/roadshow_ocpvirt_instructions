@@ -4,6 +4,8 @@ This *OpenShift Virtualization Roadshow* lab is organized in the following secti
 
 * *Review environment*: This section reviews the *OpenShift* installation to be used for the following labs. It includes basic  concepts for people who is new to *OpenShift*.
 
+%preinstall_operators%
+
 ifdef::preinstall_operators[]
 * *OpenShift Virtualization basics*: In this section you will review the *OpenShift Virtualization* operator. Even this lab is related to the migration from other platforms, this lab covers the basics and the required concepts needed to run simple *Virtual Machines* and administrate them.
 endif::[]
