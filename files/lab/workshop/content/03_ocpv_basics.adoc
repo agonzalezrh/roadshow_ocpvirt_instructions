@@ -2,7 +2,6 @@
 :toc2:
 :preinstall_operators: %preinstall_operators%
 
-
 = OpenShift Virtualization Basics
 
 :numbered:
@@ -93,9 +92,8 @@ ifeval::["{preinstall_operators}" == "False"]
 
 
 . Click the *Details* tab to view information about the Operator:
-+
 endif::[]
-
++
 image::images/Install/11_Details_1.png[]
 
 . Scroll down to the *ClusterServiceVersion details* section and review the details:
@@ -153,7 +151,7 @@ image::images/Create_VM_PVC/03_Create_Project.png[]
 +
 image::images/Create_VM_PVC/04_Create_VM_Templates.png[]
 +
-The templates with an already configured PVC are marked in blue with `Source available`.
+The templates with an already configured disks are marked in blue with `Source available`.
 
 . Select the *Fedora VM* tile and a dialog opens.
 +
@@ -298,7 +296,7 @@ image::images/Create_VM_PVC/30_Windows_2k9_Parameters_Filled.png[]
 +
 image::images/Create_VM_PVC/30_Windows_2k9_Scripts.png[]
 
-. Fill the unattend.xml form with the following code
+. Fill the autounattend.xml form with the following code
 +
 [source,xml]
 ----
@@ -466,4 +464,4 @@ The VM is marked as "Not migratable" because a CD-ROM disk is attached.
 
 In this lab, you have installed the *OpenShift Virtualization* operator and you have created a VM using a pre-configured PVC provided by the Operator. As well you have a new Windows VM using a ISO image.
 
-You may continue to the next lab, _Virtual Machine Cusotmization Lab_, where you will customize the VM during creation and you will manage the VM.
+You may continue to the next lab, _Virtual Machine Customization Lab_, where you will customize the VM during creation and you will manage the VM.

@@ -1,9 +1,11 @@
 :scrollbar:
 :toc2:
+:preinstall_operators: %preinstall_operators%
 
 =  Migration Toolkit Virtualization
 
-In this lab, you will install the Operator to perform OpenShift Virtualization Roadshow .
+ifeval::["{preinstall_operators}" == "False"]
+In this lab, you will install the Operator to perform migrations from VMware.
 
 .Goals
 * Install Operator 
@@ -11,6 +13,19 @@ In this lab, you will install the Operator to perform OpenShift Virtualization R
 * Configure Network and Storage Mapping
 * Create migration plan
 * Perform migration
+endif::[]
+
+ifeval::["{preinstall_operators}" == "True"]
+In this lab, you will review the Operator to perform migrations from VMware.
+
+.Goals
+* Review Operator 
+* Connect to provider VMWare
+* Configure Network and Storage Mapping
+* Create migration plan
+* Perform migration
+endif::[]
+
 
 == Introduction
 
@@ -59,6 +74,7 @@ This feature allows a migration to proceed smoothly even if someone entered a VM
 
 Prerequisites for VMWare are described in the following link:https://access.redhat.com/documentation/en-us/migration_toolkit_for_virtualization/2.4/html-single/installing_and_using_the_migration_toolkit_for_virtualization/index#vmware-prerequisites_mtv[link]
 
+ifeval::["{preinstall_operators}" == "False"]
 
 == Install and configure the MTV Operator
 
@@ -96,6 +112,8 @@ image::images/MTV/06_ForkliftController_Webconsole.png[]
 +
 image::images/MTV/07_MTV_Left_Menu.png[]
 
+endif::[]
+
 == Migrating from VMWare
 
 Current environment is configured as the following:
@@ -109,20 +127,22 @@ http://webapp.vc.opentlc.com/
 
 === Review VMware environment
 
-TODO
+. Navigate to link:https://portal.vc.opentlc.com/ui/app/folder;nav=v/urn:vmomi:Folder:group-v16081:ee1bef3e-6179-4c1f-9d2a-004c7b0df4e5/vms/vms[https://portal.vc.opentlc.com^]
 
-Navigate to link:https://portal.vc.opentlc.com/ui/app/folder;nav=v/urn:vmomi:Folder:group-v16081:ee1bef3e-6179-4c1f-9d2a-004c7b0df4e5/vms/vms[https://portal.vc.opentlc.com]
-Login
-Review VMs
+. Login with the user `ocpvirtroadshow@vc.opentlc.com` and the password `%vcenter_password%`
 
+. Review the existing VMs
 image::images/MTV/100_vSphere_VM_List.png[]
++
+[NOTE]
+The VMs with suffix `_running` are the active ones. As for the migration have to be stopped, a clone of the VMs were created for the migration. Those VMs are the ones without that suffix.
 
-Review Segment: https://portal.vc.opentlc.com/ui/app/dvportgroup;nav=n/urn:vmomi:DistributedVirtualPortgroup:dvportgroup-1916:ee1bef3e-6179-4c1f-9d2a-004c7b0df4e5/ports
-
+. Review Segment navigating link:https://portal.vc.opentlc.com/ui/app/dvportgroup;nav=n/urn:vmomi:DistributedVirtualPortgroup:dvportgroup-1916:ee1bef3e-6179-4c1f-9d2a-004c7b0df4e5/ports[to this link^]
++
 image::images/MTV/101_vSphere_Network.png[]
 
-Review storage: https://portal.vc.opentlc.com/ui/app/datastore;nav=s/urn:vmomi:Datastore:datastore-48:ee1bef3e-6179-4c1f-9d2a-004c7b0df4e5/vms/vms
-
+. Review storage navigating link:https://portal.vc.opentlc.com/ui/app/datastore;nav=s/urn:vmomi:Datastore:datastore-48:ee1bef3e-6179-4c1f-9d2a-004c7b0df4e5/vms/vms[to this link^]
++
 image::images/MTV/102_vSphere_Datastore.png[]
 
 

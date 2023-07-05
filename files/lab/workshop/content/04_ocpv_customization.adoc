@@ -90,7 +90,7 @@ image::images/Create_VM_URL/05_Wizard_Scripts.png[]
 +
 image::images/Create_VM_URL/05_Wizard_Scripts_Password.png[]
 
-. Press *Create VirtualMachine* and ensure *Start this VirtualMachine after creation* is checked
+. Press *Create VirtualMachine* ensuring the option *Start this VirtualMachine after creation* is checked
 +
 image::images/Create_VM_URL/06_Wizard_Review.png[]
 
@@ -138,7 +138,7 @@ image::images/Create_VM_URL/10_Template_YAML.png[]
 [NOTE]
 This default template is using a container disk to run a VM. The data will be ephemeral.
 
-. Scroll down and check the parameters for the temaplte
+. Scroll down and check the parameters for the template
 +
 image::images/Create_VM_URL/11_Template_YAML_parameters.png[]
 
@@ -160,7 +160,7 @@ image::images/Create_VM_URL/15_Catalog_Create_VM_Review.png[]
 
 . Navigate to *Console* and login with the password defined before.
 
-. Navigate to tab *Configuration* and subtab *Disks*. Revie wthe VM was created with a container disk as the template defined
+. Navigate to tab *Configuration* and subtab *Disks*. Review the VM was created with a container disk as the template defined
 +
 image::images/Create_VM_URL/16_Ephemeral_Disk.png[]
 

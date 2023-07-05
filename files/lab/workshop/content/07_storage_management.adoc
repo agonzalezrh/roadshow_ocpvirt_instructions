@@ -76,7 +76,7 @@ image::images/Storage/05_PVC_VM_Info.png[]
 +
 image::images/Storage/07_PV_List.png[]
 
-. Now vavigate to *Virtualization* -> *Bootable volumes* to obtain a list of the available volumes
+. Now navigate to *Virtualization* -> *Bootable volumes* to obtain a list of the available volumes
 +
 image::images/Storage/08_List_Bootable_Volumes.png[]
 

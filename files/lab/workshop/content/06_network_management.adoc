@@ -1,5 +1,6 @@
 :scrollbar:
 :toc2:
+:preinstall_operators: %preinstall_operators%
 
 = Network Management Lab
 
@@ -14,6 +15,9 @@ In this lab, you connect a VM to a physical network so that it is accessible out
 .Goals
 * Create a Linux^(R)^ Bridge on worker nodes
 * Create a network attachment definition
+
+ifeval::["{preinstall_operators}" == "False"]
+
 
 == Install NMstate operator
 
@@ -41,7 +45,7 @@ image::images/Networking/00_Operator_Create_Instance.png[]
 +
 image::images/Networking/00_Operator_Create_Instance_Wizard.png[]
 
-
+endif::[]
 
 == Create Linux Bridge on Worker Nodes
 
@@ -142,6 +146,9 @@ The `eth1` interface obtains an IP address from the flat network (192.168.3.x/24
 ----
 [~] $ curl 192.168.3.118:22                           
 ----
++
+[NOTE]
+Replace the IP which the IP assigned to the node.
 +
 .Sample Output
 +

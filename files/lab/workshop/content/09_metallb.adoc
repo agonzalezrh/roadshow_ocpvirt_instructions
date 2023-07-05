@@ -1,14 +1,26 @@
 :scrollbar:
 :toc2:
+:preinstall_operators: %preinstall_operators%
 
 =  MetalLB
 
+ifeval::["{preinstall_operators}" == "False"]
 In this lab, you will learn how to install the MetalLB operator, configure and expose services outside of the cluster.
 
 .Goals
 * Install Operator 
 * Configure MetalLB
 * Expose service externally
+endif::[]
+
+
+ifeval::["{preinstall_operators}" == "True"]
+In this lab, you will review the MetalLB operator and expose services outside of the cluster.
+
+.Goals
+* Review Operator 
+* Expose service externally
+endif::[]
 
 == Introduction
 
@@ -43,6 +55,7 @@ If a node becomes unavailable, the router initiates a new connection with anothe
 image::images/MetalLB/00_bgp.png[]
 
 
+ifeval::["{preinstall_operators}" == "False"]
 
 == Install and configure the MetalLB operator
 
@@ -74,6 +87,28 @@ image::images/MetalLB/06_MetalLB_create.png[]
 . Wait till the `Status` column indicates is available
 +
 image::images/MetalLB/07_MetalLB_available.png[]
+
+endif::[]
+
+ifeval::["{preinstall_operators}" == "True"]
+
+== Review Operator
+
+. Navigate to *Operators* -> *Installed Operators*. Select *All Projects* and select *MetalLB*
++
+image::images/MetalLB/01_Operator_Installed.png[]
+
+. Review the *Provided APIs* on the Details tab
++
+image::images/MetalLB/02_Review_Operator.png[]
+
+. Select the tab *MetalLB* to ensure the deployment is correct
++
+image::images/MetalLB/03_Review_Operator_MetalLB.png[]
+
+
+endif::[]
+
 
 === Define IP AddressPool
 
@@ -111,7 +146,7 @@ image::images/MetalLB/11_Services.png[]
 
 . Press *Create Service* and fill the form with the following code
 +
-[%nowrap]
+[source,yaml]
 ----
 apiVersion: v1
 kind: Service
