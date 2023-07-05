@@ -111,10 +111,14 @@ spec:
 ----
 
 . Wait till the `Status` column changes to `Completed`
++
+image::images/Backup/07_Restore_Completed.png[]
 
-
+. Navigate back to *Virtualization* -> *Virtual Machines* and ensure the `fedora02` was restored.
++
+image::images/Backup/08_VM_Restored.png[]
 
 
 
 == Summary 
-MetalLB is the solution on baremetal on-premise deployments to expose applications outside of the cluster without the need to configure physical networks with multus.
+Backup and Restore VMs is one of the important tasks for administrators. This module showed you how to perform a backup of a running VM and how to restore it.
