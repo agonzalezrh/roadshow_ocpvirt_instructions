@@ -132,6 +132,7 @@ http://webapp.vc.opentlc.com/
 . Login with the user `ocpvirtroadshow@vc.opentlc.com` and the password `%vcenter_password%`
 
 . Review the existing VMs
++
 image::images/MTV/100_vSphere_VM_List.png[]
 +
 [NOTE]
